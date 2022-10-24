@@ -1,42 +1,10 @@
+import { getAddress } from "@ethersproject/address"
 import { z } from "zod"
 
-export const email = z
-  .string()
-  .email()
-  .transform((str) => str.toLowerCase().trim())
-
-export const password = z
-  .string()
-  .min(10)
-  .max(100)
-  .transform((str) => str.trim())
-
-export const Signup = z.object({
-  email,
-  password,
-})
+export const address = z.string()
 
 export const Login = z.object({
-  email,
-  password: z.string(),
-})
-
-export const ForgotPassword = z.object({
-  email,
-})
-
-export const ResetPassword = z
-  .object({
-    password: password,
-    passwordConfirmation: password,
-    token: z.string(),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords don't match",
-    path: ["passwordConfirmation"], // set the path of the error
-  })
-
-export const ChangePassword = z.object({
-  currentPassword: z.string(),
-  newPassword: password,
+  address: z.string().regex(/0x[0-9a-zA-Z]40/),
+  signature: z.string(),
+  expireAt: z.date(),
 })
