@@ -6,7 +6,8 @@ import Layout from "app/core/layouts/Layout"
 import { useUser } from "app/auth/hooks/useUser"
 import Image from "next/image"
 import placeholder from "public/placeholder.png"
-import { ReactElement } from "react"
+import { ReactElement, useEffect } from "react"
+import { useRouter } from "next/router"
 
 const Brand = styled.div`
   margin: 2rem 0;
@@ -23,7 +24,17 @@ const StepBox = styled.div`
 `
 
 const Home: BlitzPage = () => {
-  const { startLogin } = useUser()
+  const router = useRouter()
+  const { startLogin, isLogedIn } = useUser()
+
+  useEffect(() => {
+    if (isLogedIn) {
+      router
+        .push("/manage")
+        .then(() => {})
+        .catch(() => {})
+    }
+  }, [isLogedIn, router])
 
   return (
     <Layout title="Home">

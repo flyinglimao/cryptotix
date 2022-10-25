@@ -7,51 +7,19 @@ import { useQuery, useMutation } from "@blitzjs/rpc"
 import { useParam } from "@blitzjs/next"
 
 import Layout from "app/core/layouts/Layout"
-import getEvent from "app/events/queries/getEvent"
-import deleteEvent from "app/events/mutations/deleteEvent"
 
 export const Event = () => {
   const router = useRouter()
   const eventId = useParam("eventId", "number")
-  const [deleteEventMutation] = useMutation(deleteEvent)
-  const [event] = useQuery(getEvent, { id: eventId })
 
-  return (
-    <>
-      <Head>
-        <title>Event {event.id}</title>
-      </Head>
-
-      <div>
-        <h1>Event {event.id}</h1>
-        <pre>{JSON.stringify(event, null, 2)}</pre>
-
-        <Link href={Routes.EditEventPage({ eventId: event.id })}>
-          <a>Edit</a>
-        </Link>
-
-        <button
-          type="button"
-          onClick={async () => {
-            if (window.confirm("This will be deleted")) {
-              await deleteEventMutation({ id: event.id })
-              await router.push(Routes.EventsPage())
-            }
-          }}
-          style={{ marginLeft: "0.5rem" }}
-        >
-          Delete
-        </button>
-      </div>
-    </>
-  )
+  return <></>
 }
 
 const ShowEventPage = () => {
   return (
     <div>
       <p>
-        <Link href={Routes.EventsPage()}>
+        <Link href={"/"}>
           <a>Events</a>
         </Link>
       </p>
@@ -63,7 +31,6 @@ const ShowEventPage = () => {
   )
 }
 
-ShowEventPage.authenticate = true
 ShowEventPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowEventPage

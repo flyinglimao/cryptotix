@@ -6,8 +6,9 @@ import { createClient, WagmiConfig, configureChains, defaultChains } from "wagmi
 import { publicProvider } from "wagmi/providers/public"
 import { InjectedConnector } from "wagmi/connectors/injected"
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
-import { getDefaultProvider } from "ethers"
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 import { LoginModalProvider } from "app/auth/components/LoginModal"
+import { LocalizationProvider } from "@mui/x-date-pickers"
 
 const { chains, provider } = configureChains(defaultChains, [publicProvider()])
 
@@ -49,9 +50,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   return (
     <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      <WagmiConfig client={client}>
-        <LoginModalProvider>{getLayout(<Component {...pageProps} />)}</LoginModalProvider>
-      </WagmiConfig>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <WagmiConfig client={client}>
+          <LoginModalProvider>{getLayout(<Component {...pageProps} />)}</LoginModalProvider>
+        </WagmiConfig>
+      </LocalizationProvider>
     </ErrorBoundary>
   )
 }

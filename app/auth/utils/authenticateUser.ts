@@ -1,10 +1,10 @@
 import { AuthenticationError } from "blitz"
-import db from "db"
 import { verifyMessage } from "ethers/lib/utils"
-import { Address } from "wagmi"
+import { AuthenticatedUser } from "../components/LoginModal"
 import { buildLoginMessage } from "./buildLoginMessage"
 
-export const authenticateUser = async (address: Address, signature: string, expireAt: Date) => {
+export const authenticateUser = async (user: AuthenticatedUser) => {
+  const { address, signature, expireAt } = user
   const expectMessage = buildLoginMessage(address, expireAt)
   try {
     const signer = verifyMessage(expectMessage, signature)
@@ -12,15 +12,5 @@ export const authenticateUser = async (address: Address, signature: string, expi
   } catch (err) {
     throw new AuthenticationError()
   }
-
-  const user = await db.user.findFirst({ where: { address } })
-  if (!user) {
-    // register if not exist
-    return await db.user.create({
-      data: { address },
-      select: { id: true, address: true },
-    })
-  }
-
-  return user
+  return
 }

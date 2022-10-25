@@ -13,13 +13,33 @@ generator client {
 // --------------------------------------
 
 model Event {
-  id             Int      @id @default(autoincrement())
-  hashedPassword String
+  id             Int     @id @default(autoincrement())
+  name           String
+  hashedPassword String?
   tokenAddress   String
-  rule           String   @default("{}")
-  endAt          DateTime
+  minBalance     Int
   chainId        String
   owner          String // address
+
+  Cut             Cut[]
+  EventVerifyPass VerifyToken[]
+}
+
+model VerifyToken {
+  id    Int    @id @default(autoincrement())
+  token String @unique
+
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+}
+
+model Cut {
+  id        Int      @id @default(autoincrement())
+  address   String
+  createdAt DateTime @default(now())
+
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
 }
 
 // NOTE: It's highly recommended to use an enum for the token type

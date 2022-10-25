@@ -1,4 +1,5 @@
 import { Box, Button, Modal, Typography } from "@mui/material"
+import { Loading } from "components/Loading"
 import { getAddress, verifyMessage } from "ethers/lib/utils"
 import {
   createContext,
@@ -11,10 +12,8 @@ import {
 } from "react"
 import { Address, useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi"
 import { buildLoginMessage } from "../utils/buildLoginMessage"
-import { Loading } from "components/Loading"
-import { useRouter } from "next/router"
 
-interface AuthenticatedUser {
+export interface AuthenticatedUser {
   address: Address
   signature: string
   expireAt: Date
@@ -98,7 +97,6 @@ function LoginModal(): ReactElement {
 }
 
 export function LoginModalProvider({ children }: PropsWithChildren<{}>): ReactElement {
-  const router = useRouter()
   const { connector, address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const [show, setShow] = useState(false)
@@ -141,13 +139,9 @@ export function LoginModalProvider({ children }: PropsWithChildren<{}>): ReactEl
   }, [isError])
 
   useEffect(() => {
-    if (!signature) return
+    if (!signature || !show) return
     setShow(false)
-    router
-      .push("/manage")
-      .then(() => {})
-      .catch(() => {})
-  }, [router, signature])
+  }, [show, signature])
 
   const user =
     address && signature && expireAt

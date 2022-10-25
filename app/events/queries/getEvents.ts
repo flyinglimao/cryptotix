@@ -1,35 +1,21 @@
-import { paginate } from "blitz";
-import { resolver } from "@blitzjs/rpc";
-import db, { Prisma } from "db";
+import { resolver } from "@blitzjs/rpc"
+import { AuthenticatedUser } from "app/auth/components/LoginModal"
+import { authenticateUser } from "app/auth/utils/authenticateUser"
+import db from "db"
 
-interface GetEventsInput
-  extends Pick<
-    Prisma.EventFindManyArgs,
-    "where" | "orderBy" | "skip" | "take"
-  > {}
+export default resolver.pipe(async ({ user }: { user: AuthenticatedUser }) => {
+  await authenticateUser(user)
 
-export default resolver.pipe(
-  resolver.authorize(),
-  async ({ where, orderBy, skip = 0, take = 100 }: GetEventsInput) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const {
-      items: events,
-      hasMore,
-      nextPage,
-      count,
-    } = await paginate({
-      skip,
-      take,
-      count: () => db.event.count({ where }),
-      query: (paginateArgs) =>
-        db.event.findMany({ ...paginateArgs, where, orderBy }),
-    });
-
-    return {
-      events,
-      nextPage,
-      hasMore,
-      count,
-    };
-  }
-);
+  return (
+    (await db.event.findMany({
+      where: { owner: user.address },
+      select: {
+        id: true,
+        name: true,
+        minBalance: true,
+        tokenAddress: true,
+        chainId: true,
+      },
+    })) || []
+  )
+})

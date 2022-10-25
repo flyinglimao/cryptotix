@@ -1,10 +1,8 @@
-import { getAddress } from "@ethersproject/address"
+import { isAddress } from "ethers/lib/utils"
 import { z } from "zod"
 
-export const address = z.string()
-
 export const Login = z.object({
-  address: z.string().regex(/0x[0-9a-zA-Z]40/),
+  address: z.string().refine(isAddress),
   signature: z.string(),
   expireAt: z.date(),
 })
