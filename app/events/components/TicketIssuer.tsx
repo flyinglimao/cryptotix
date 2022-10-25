@@ -5,6 +5,8 @@ import { Address, useAccount, useConnect, useSignMessage } from "wagmi"
 import { QRCodeSVG } from "qrcode.react"
 import { useResizeDetector } from "react-resize-detector"
 import styled from "@emotion/styled"
+import { useQuery } from "@blitzjs/rpc"
+import verify from "app/events/queries/verify"
 
 const QRCodeDisplay = styled.div`
   svg {
@@ -17,9 +19,10 @@ const QRCodeDisplay = styled.div`
 interface TicketIssuerProps {
   name: string
   tokenAddress: Address
+  eventId: number
 }
 
-export function TicketIssuer({ name, tokenAddress }: TicketIssuerProps): ReactElement {
+export function TicketIssuer({ name, tokenAddress, eventId }: TicketIssuerProps): ReactElement {
   const { width, ref } = useResizeDetector()
   const { address, isConnected } = useAccount()
   const checksumAddress = address ? getAddress(address) : ""
@@ -28,6 +31,10 @@ export function TicketIssuer({ name, tokenAddress }: TicketIssuerProps): ReactEl
     message: `I (${checksumAddress}) am signing this message to issue a ticket for ${name} with the ownership of tokens of ${tokenAddress} on CryptoTix`,
   })
   const [showConnect, setShowConnect] = useState(false)
+  const [result, { isLoading: isVerifying }] = useQuery(verify, {
+    eventId,
+    address,
+  })
 
   useEffect(() => {
     if (isConnected) setShowConnect(false)
@@ -41,17 +48,23 @@ export function TicketIssuer({ name, tokenAddress }: TicketIssuerProps): ReactEl
         <Button variant="contained" onClick={() => setShowConnect(true)}>
           Connect Wallet
         </Button>
-      ) : !signature ? (
-        <Button variant="contained" onClick={() => signMessage()}>
-          Sign Message to Issue a Ticket
-        </Button>
-      ) : (
-        <QRCodeDisplay>
-          <QRCodeSVG value={payload} size={width && Math.min(600, width)} />
-          <Button variant="outlined" sx={{ marginTop: "1rem" }}>
-            Encrypt and Generate URL
+      ) : isVerifying ? (
+        <Typography variant="body1">Loading...</Typography>
+      ) : result ? (
+        !signature ? (
+          <Button variant="contained" onClick={() => signMessage()}>
+            Sign Message to Issue a Ticket
           </Button>
-        </QRCodeDisplay>
+        ) : (
+          <QRCodeDisplay>
+            <QRCodeSVG value={payload} size={width && Math.min(400, width)} />
+            {/* <Button variant="outlined" sx={{ marginTop: "1rem" }}>
+            Encrypt and Generate URL
+          </Button> */}
+          </QRCodeDisplay>
+        )
+      ) : (
+        <Typography variant="body1">Not eligible</Typography>
       )}
       <Modal open={showConnect} onClose={() => setShowConnect(false)}>
         <Box

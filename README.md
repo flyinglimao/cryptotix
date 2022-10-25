@@ -18,18 +18,27 @@ Open [CryptoTix](https://cryptotix.limaois.me).
 
 ## Run a New Server
 
-A new server can be started by cloning this repository and running
+A new server can be started by cloning this repository, then run
 
 ```
 yarn install
 yarn build
+```
+
+Before start the server, environment variables should be provided.
+```
+cp .env .env.production
+vim .env.production
+```
+
+The server is now ready.
+```
 yarn start
 ```
 
 The default database is SQLite, it can be changed by modifiying `db/index.ts`.
 
-You may want to limit people to register as an event holder, set `ALLOW_REGISTER` to `true` in the environment variable will achieve that. (You have to register yourself
-before disabling.)
+You may want to limit people to create an event, set `DISABLE_REGISTER` to `true` in the environment variable will achieve that. (You have to create yours before disabling.)
 
 ## Development
 

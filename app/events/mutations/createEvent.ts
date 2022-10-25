@@ -2,6 +2,7 @@ import { resolver } from "@blitzjs/rpc"
 import { AuthenticatedUser } from "app/auth/components/LoginModal"
 import { authenticateUser } from "app/auth/utils/authenticateUser"
 import { Login } from "app/auth/validations"
+import { AuthenticationError } from "blitz"
 import db from "db"
 import { isAddress } from "ethers/lib/utils"
 import { z } from "zod"
@@ -16,7 +17,8 @@ const CreateEvent = z.object({
 })
 
 export default resolver.pipe(resolver.zod(CreateEvent), async (input) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  if (process.env.DISABLE_REGISTER) throw new AuthenticationError()
+
   await authenticateUser(input.user as AuthenticatedUser)
 
   const event = await db.event.create({

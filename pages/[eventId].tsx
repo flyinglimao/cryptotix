@@ -32,7 +32,11 @@ export const Event = () => {
             This event requires you to have at least {event.minBalance}{" "}
             {event.minBalance === 1 ? "token" : "tokens"} of {event.tokenAddress}
           </Typography>
-          <TicketIssuer name={event.name} tokenAddress={event.tokenAddress as Address} />
+          <TicketIssuer
+            name={event.name}
+            tokenAddress={event.tokenAddress as Address}
+            eventId={eventId!}
+          />
         </Main>
       ) : (
         <Protected>
