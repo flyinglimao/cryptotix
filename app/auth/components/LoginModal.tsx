@@ -43,12 +43,7 @@ function LoginModal(): ReactElement {
   const { isLogining, stopLogin } = useContext(LoginModalContext)
 
   return (
-    <Modal
-      open={isLogining}
-      onClose={() => stopLogin()}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={isLogining} onClose={() => stopLogin()}>
       <Box
         sx={{
           position: "fixed",

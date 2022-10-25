@@ -24,7 +24,6 @@ const Layout: BlitzLayout<{ title?: string; children?: React.ReactNode }> = ({
                 component="a"
                 sx={{
                   mr: 2,
-                  display: { xs: "none", md: "flex" },
                   fontWeight: 700,
                   letterSpacing: ".3rem",
                   color: "inherit",
