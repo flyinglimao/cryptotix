@@ -74,11 +74,7 @@ function EventManagePage(): ReactElement {
       }
       const [address, signature] = scanResult.split(",")
       setAddress(address!)
-      const message = buildTicketMessage(
-        address as Address,
-        event!.name,
-        event!.tokenAddress as Address
-      )
+      const message = buildTicketMessage(address as Address, event!.name, eventId!)
       try {
         if (getAddress(verifyMessage(message, signature!)) !== getAddress(address!)) {
           setVerifyState("Failed")

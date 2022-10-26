@@ -1,14 +1,14 @@
 import { useParam } from "@blitzjs/next"
 import { useQuery } from "@blitzjs/rpc"
-import { Suspense, useState } from "react"
-import { Button, Container, Typography } from "@mui/material"
+import styled from "@emotion/styled"
+import { Box, Button, Container, Typography } from "@mui/material"
 import Layout from "app/core/layouts/Layout"
+import { RuleList } from "app/events/components/RuleEngine/RuleList"
+import { TicketIssuer } from "app/events/components/TicketIssuer"
 import getEvent from "app/events/queries/getEvent"
 import { TextField } from "mui-rff"
+import { Suspense, useState } from "react"
 import { Form } from "react-final-form"
-import styled from "@emotion/styled"
-import { TicketIssuer } from "app/events/components/TicketIssuer"
-import { Address } from "wagmi"
 
 const Main = styled.main`
   margin: 4rem;
@@ -24,20 +24,15 @@ export const Event = () => {
   const [event] = useQuery(getEvent, { id: eventId, password })
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       {event ? (
         <Main>
           <Typography variant="h1">{event.name}</Typography>
-          <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
-            This event requires you to have at least {event.minBalance}{" "}
-            {event.minBalance === 1 ? "token" : "tokens"} of {event.tokenAddress}
-          </Typography>
-          <TicketIssuer
-            name={event.name}
-            tokenAddress={event.tokenAddress as Address}
-            eventId={eventId!}
-            password={password}
-          />
+          <Box sx={{ textAlign: "left" }}>
+            This event requires you to:
+            <RuleList rule={JSON.parse(event.rule)} />
+          </Box>
+          <TicketIssuer name={event.name} eventId={eventId!} password={password} />
         </Main>
       ) : (
         <Protected>

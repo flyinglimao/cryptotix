@@ -1,10 +1,17 @@
-import { isAddress } from "ethers/lib/utils"
+import { Login } from "app/auth/validations"
 import { z } from "zod"
+
+export const Event = z.object({
+  name: z.string(),
+  hashedPassword: z.string(),
+  chainId: z.string(),
+  rule: z.string(),
+})
 
 export const CreateEvent = z.object({
   name: z.string(),
   hashedPassword: z.string(),
-  tokenAddress: z.string().refine(isAddress, { message: "Invalid token address" }),
   chainId: z.string(),
-  minBalance: z.number(),
+  rule: z.string(),
+  user: Login,
 })

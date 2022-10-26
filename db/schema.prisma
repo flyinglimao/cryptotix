@@ -16,8 +16,7 @@ model Event {
   id             Int     @id @default(autoincrement())
   name           String
   hashedPassword String?
-  tokenAddress   String
-  minBalance     Int
+  rule           String
   chainId        String
   owner          String // address
 

@@ -19,23 +19,17 @@ const QRCodeDisplay = styled.div`
 
 interface TicketIssuerProps {
   name: string
-  tokenAddress: Address
   eventId: number
   password?: string
 }
 
-export function TicketIssuer({
-  name,
-  tokenAddress,
-  eventId,
-  password,
-}: TicketIssuerProps): ReactElement {
+export function TicketIssuer({ name, eventId, password }: TicketIssuerProps): ReactElement {
   const { width, ref } = useResizeDetector()
   const { address, isConnected } = useAccount()
   const checksumAddress = address ? getAddress(address) : ""
   const { connect, connectors, isLoading, pendingConnector } = useConnect()
   const { data: signature, signMessage } = useSignMessage({
-    message: address ? buildTicketMessage(address, name, tokenAddress) : "",
+    message: address ? buildTicketMessage(address, name, eventId) : "",
   })
   const [showConnect, setShowConnect] = useState(false)
   const [result, { isLoading: isVerifying }] = useQuery(verify, {

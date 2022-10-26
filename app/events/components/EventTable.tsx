@@ -16,6 +16,8 @@ import getEvents from "app/events/queries/getEvents"
 import Link from "next/link"
 import { Fragment, ReactElement, Suspense, useState } from "react"
 import { CopyToClipboard } from "react-copy-to-clipboard"
+import { RuleList } from "./RuleEngine/RuleList"
+import { Rule } from "./RuleEngine/ruleTypes"
 
 function RowPlaceholder({ text }: { text: string }): ReactElement {
   return (
@@ -33,8 +35,7 @@ function EventRow({
   event: {
     id: number
     name: string
-    minBalance: number
-    tokenAddress: string
+    rule: Rule
     chainId: string
   }
 }): ReactElement {
@@ -68,9 +69,9 @@ function EventRow({
               <Typography variant="h6" component="div">
                 Rule
               </Typography>
-              <Typography variant="body1">
-                Guests must have at least {event.minBalance} tokens of {event.tokenAddress}
-              </Typography>
+              <Box sx={{ pl: 2, mt: 1 }}>
+                <RuleList rule={event.rule} />
+              </Box>
             </Box>
           </Collapse>
         </TableCell>
@@ -84,7 +85,15 @@ function EventList({ user }: { user: AuthenticatedUser }): ReactElement {
   return (
     <Fragment>
       {events.length ? (
-        events.map((evt) => <EventRow event={evt} key={`event-row-${evt.id}`} />)
+        events.map((evt) => (
+          <EventRow
+            event={{
+              ...evt,
+              rule: JSON.parse(evt.rule) as Rule,
+            }}
+            key={`event-row-${evt.id}`}
+          />
+        ))
       ) : (
         <RowPlaceholder text="No Data" />
       )}

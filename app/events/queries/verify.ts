@@ -7,6 +7,7 @@ import { ExternalServiceError } from "app/core/errors/ExternalServiceError"
 import { AuthenticatedUser } from "app/auth/components/LoginModal"
 import { authenticateUser } from "app/auth/utils/authenticateUser"
 import { utils } from "ethers"
+import RuleEngine from "../components/RuleEngine"
 
 // returns an event if doesn't require a password or password correct
 // returns null if exists and require a password
@@ -27,7 +28,7 @@ export default resolver.pipe(
 
     const event = await db.event.findFirst({
       where: { id: eventId },
-      select: { tokenAddress: true, minBalance: true, chainId: true, hashedPassword: true },
+      select: { chainId: true, hashedPassword: true, rule: true },
     })
     if (!event) throw new NotFoundError()
     if (event.hashedPassword) {
@@ -37,27 +38,7 @@ export default resolver.pipe(
       }
     }
 
-    const options = {
-      method: "GET",
-      url: `https://deep-index.moralis.io/api/v2/${address}/nft`,
-      params: {
-        chain: event.chainId,
-        format: "decimal",
-        token_addresses: event.tokenAddress,
-      },
-      headers: { accept: "application/json", "X-API-Key": process.env.MORALIS_API_KEY },
-    }
-
-    return await axios
-      .request(options)
-      .then(function (response) {
-        const amount = response.data.result
-          .map((e: { amount: string }) => parseInt(e.amount))
-          .reduce((a: number, b: number) => a + b, 0)
-        return amount >= event.minBalance
-      })
-      .catch(function (error) {
-        throw new ExternalServiceError(error.message)
-      })
+    const ruleEngine = new RuleEngine(JSON.parse(event.rule))
+    return await ruleEngine.execute(address, event.chainId)
   }
 )

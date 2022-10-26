@@ -12,8 +12,7 @@ export default resolver.pipe(async ({ user }: { user: AuthenticatedUser }) => {
       select: {
         id: true,
         name: true,
-        minBalance: true,
-        tokenAddress: true,
+        rule: true,
         chainId: true,
       },
     })) || []
