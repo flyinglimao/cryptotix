@@ -13,7 +13,9 @@ import {
 } from "@mui/material"
 import { AuthenticatedUser } from "app/auth/components/LoginModal"
 import getEvents from "app/events/queries/getEvents"
+import Link from "next/link"
 import { Fragment, ReactElement, Suspense, useState } from "react"
+import { CopyToClipboard } from "react-copy-to-clipboard"
 
 function RowPlaceholder({ text }: { text: string }): ReactElement {
   return (
@@ -47,9 +49,16 @@ function EventRow({
         </TableCell>
         <TableCell>{event.name}</TableCell>
         <TableCell align="right">
-          <Button variant="outlined" size="small">
-            Start Verify
-          </Button>
+          <CopyToClipboard text={new URL(`/${event.id}`, location.href).toString()}>
+            <Button variant="outlined" size="small">
+              Copy Link
+            </Button>
+          </CopyToClipboard>
+          <Link href={`/manage/${event.id}`} passHref>
+            <Button variant="outlined" size="small" component="a" sx={{ marginLeft: "0.5rem" }}>
+              Start Verify
+            </Button>
+          </Link>
         </TableCell>
       </TableRow>
       <TableRow>

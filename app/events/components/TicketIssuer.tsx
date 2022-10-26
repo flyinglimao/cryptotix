@@ -7,6 +7,7 @@ import { useResizeDetector } from "react-resize-detector"
 import styled from "@emotion/styled"
 import { useQuery } from "@blitzjs/rpc"
 import verify from "app/events/queries/verify"
+import { buildTicketMessage } from "../utils/buildTicketMessage"
 
 const QRCodeDisplay = styled.div`
   svg {
@@ -20,20 +21,27 @@ interface TicketIssuerProps {
   name: string
   tokenAddress: Address
   eventId: number
+  password?: string
 }
 
-export function TicketIssuer({ name, tokenAddress, eventId }: TicketIssuerProps): ReactElement {
+export function TicketIssuer({
+  name,
+  tokenAddress,
+  eventId,
+  password,
+}: TicketIssuerProps): ReactElement {
   const { width, ref } = useResizeDetector()
   const { address, isConnected } = useAccount()
   const checksumAddress = address ? getAddress(address) : ""
   const { connect, connectors, isLoading, pendingConnector } = useConnect()
   const { data: signature, signMessage } = useSignMessage({
-    message: `I (${checksumAddress}) am signing this message to issue a ticket for ${name} with the ownership of tokens of ${tokenAddress} on CryptoTix`,
+    message: address ? buildTicketMessage(address, name, tokenAddress) : "",
   })
   const [showConnect, setShowConnect] = useState(false)
   const [result, { isLoading: isVerifying }] = useQuery(verify, {
     eventId,
     address,
+    password,
   })
 
   useEffect(() => {

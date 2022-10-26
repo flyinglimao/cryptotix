@@ -36,6 +36,7 @@ export const Event = () => {
             name={event.name}
             tokenAddress={event.tokenAddress as Address}
             eventId={eventId!}
+            password={password}
           />
         </Main>
       ) : (
