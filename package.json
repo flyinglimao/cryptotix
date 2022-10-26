@@ -46,6 +46,7 @@
     "react-copy-to-clipboard": "5.1.0",
     "react-dom": "18.2.0",
     "react-final-form": "6.5.9",
+    "react-qr-reader": "3.0.0-beta-1",
     "react-resize-detector": "7.1.2",
     "wagmi": "0.7.5",
     "zod": "3.17.3"
