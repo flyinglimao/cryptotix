@@ -5,10 +5,10 @@ import { Container } from "@mui/system"
 import { useUser } from "app/auth/hooks/useUser"
 import Layout from "app/core/layouts/Layout"
 import { EventForm } from "app/events/components/EventForm"
+import { InvalidTokenAddressError } from "app/events/errors/InvalidTokenAddressError"
 import createEvent from "app/events/mutations/createEvent"
 import { CreateEvent } from "app/events/validations"
 import { utils } from "ethers"
-import { FormApi, SubmissionErrors } from "final-form"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 
@@ -51,7 +51,13 @@ const ManageCreateEvent: BlitzPage = () => {
                 : ""
 
               const payload = Object.assign({}, values, { user, hashedPassword })
-              await createEventMutation(payload)
+              try {
+                await createEventMutation(payload)
+              } catch (err) {
+                if (err.name === "InvalidTokenAddressError") {
+                  return { tokenAddress: err.message }
+                }
+              }
               await router.push("/manage")
             }}
           />
