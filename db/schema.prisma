@@ -20,16 +20,7 @@ model Event {
   chainId        String
   owner          String // address
 
-  Cut             Cut[]
-  EventVerifyPass VerifyToken[]
-}
-
-model VerifyToken {
-  id    Int    @id @default(autoincrement())
-  token String @unique
-
-  event   Event @relation(fields: [eventId], references: [id])
-  eventId Int
+  Cut Cut[]
 }
 
 model Cut {
