@@ -8,6 +8,7 @@ import styled from "@emotion/styled"
 import { useQuery } from "@blitzjs/rpc"
 import verify from "app/events/queries/verify"
 import { buildTicketMessage } from "../utils/buildTicketMessage"
+import { EncryptTicketModal } from "./EncryptTicketModal"
 
 const QRCodeDisplay = styled.div`
   svg {
@@ -32,6 +33,7 @@ export function TicketIssuer({ name, eventId, password }: TicketIssuerProps): Re
     message: address ? buildTicketMessage(address, name, eventId) : "",
   })
   const [showConnect, setShowConnect] = useState(false)
+  const [openEncryptModal, setOpenEncryptModal] = useState(false)
   const [result, { isLoading: isVerifying }] = useQuery(verify, {
     eventId,
     address,
@@ -60,9 +62,13 @@ export function TicketIssuer({ name, eventId, password }: TicketIssuerProps): Re
         ) : (
           <QRCodeDisplay>
             <QRCodeSVG value={payload} size={width && Math.min(400, width)} />
-            {/* <Button variant="outlined" sx={{ marginTop: "1rem" }}>
-            Encrypt and Generate URL
-          </Button> */}
+            <Button
+              variant="outlined"
+              sx={{ marginTop: "1rem" }}
+              onClick={() => setOpenEncryptModal(true)}
+            >
+              Encrypt and Generate URL
+            </Button>
           </QRCodeDisplay>
         )
       ) : (
@@ -100,6 +106,11 @@ export function TicketIssuer({ name, eventId, password }: TicketIssuerProps): Re
           ))}
         </Box>
       </Modal>
+      <EncryptTicketModal
+        payload={payload}
+        open={openEncryptModal}
+        onClose={() => setOpenEncryptModal(false)}
+      />
     </Box>
   )
 }
