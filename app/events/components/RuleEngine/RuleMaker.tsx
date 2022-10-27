@@ -48,13 +48,13 @@ const initialValue: { [key: string]: Rule } = {
     tokenAddress: constants.AddressZero,
     chainId: "eth",
     minBalance: 1,
-    tokenIds: [],
+    tokenIds: undefined,
   },
   ERC1155Ownership: {
     type: "ERC1155Ownership",
     tokenAddress: constants.AddressZero,
     chainId: "eth",
-    tokenIds: [],
+    tokenIds: undefined,
     minBalance: 1,
   },
   Union: {
@@ -451,9 +451,11 @@ export function RuleMaker({ rule, onChange, depth = 0 }: RuleMakerProps): ReactE
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableBody>
           {!rule && (
-            <ListItem>
-              <RuleSelect onAdd={onChange} />
-            </ListItem>
+            <TableRow>
+              <TableCell colSpan={2} sx={{ pl: 4 * depth + 4 }}>
+                <RuleSelect onAdd={onChange} />
+              </TableCell>
+            </TableRow>
           )}
           {rule?.type === "Union" && (
             <UnionRule
