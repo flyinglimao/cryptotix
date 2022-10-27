@@ -5,8 +5,15 @@ import { Container } from "@mui/system"
 import Layout from "app/core/layouts/Layout"
 import { useUser } from "app/auth/hooks/useUser"
 import Image from "next/image"
-import placeholder from "public/placeholder.png"
-import { ReactElement, useEffect } from "react"
+import goCreateEvent from "public/go-create-event.png"
+import createEvent from "public/create-event.png"
+import copyAndShare from "public/copy-and-share.png"
+import connectAndVerify from "public/connect-and-verify.png"
+import passwordEncrypt from "public/password-encrypt.png"
+import shareEncrypted from "public/share-encrypted.png"
+import passwordDecrypt from "public/password-decrypt.png"
+import cutTicket from "public/cut-ticket.png"
+import { useEffect } from "react"
 import { useRouter } from "next/router"
 
 const Brand = styled.div`
@@ -56,14 +63,48 @@ const Home: BlitzPage = () => {
               <Typography variant="body1" sx={{ textAlign: "center", marginBottom: ".6rem" }}>
                 Or want to know how to use it?
               </Typography>
-              <StepBox>
-                <Typography variant="h3">Step 1. Step Name</Typography>
-                <Typography variant="body1">Step Content</Typography>
-                <Image src={placeholder} alt="step guide screenshot"></Image>
+              <StepBox style={{ marginTop: "6rem" }}>
+                <Typography variant="h4" component="p">
+                  Step 1. Login with Wallet
+                </Typography>
               </StepBox>
               <StepBox>
-                <Typography variant="h3">Step 1. EQWEQW</Typography>
-                <Typography variant="body1">eqwjeiwqujieoqw</Typography>
+                <Typography variant="h4" component="p">
+                  Step 2. Create an event
+                </Typography>
+                <Image src={goCreateEvent} alt="Create an event in dashboard" />
+                <Image src={createEvent} alt="Fill the form and setup rules" />
+              </StepBox>
+              <StepBox>
+                <Typography variant="h4" component="p">
+                  Step 3. Copy and share link
+                </Typography>
+                <Image src={copyAndShare} alt="Copy the link and share with people" />
+              </StepBox>
+              <StepBox>
+                <Typography variant="h4" component="p">
+                  Step 4. Connect to wallet (user)
+                </Typography>
+                <Image src={connectAndVerify} alt="Copy the link and share with people" />
+              </StepBox>
+              <StepBox>
+                <Typography variant="h4" component="p">
+                  Step 4.a. Encrypt and transfer (from air-gapped device)
+                </Typography>
+                <Image src={passwordEncrypt} alt="Encrypt a ticket with password" />
+                <Image src={shareEncrypted} alt="Transfer encrypted ticket with QR code or link" />
+              </StepBox>
+              <StepBox>
+                <Typography variant="h4" component="p">
+                  Step 4.b. Dncrypt on another device
+                </Typography>
+                <Image src={passwordDecrypt} alt="Decrypt a ticket with password" />
+              </StepBox>
+              <StepBox>
+                <Typography variant="h4" component="p">
+                  Step 5. Scan and verify
+                </Typography>
+                <Image src={cutTicket} alt="Scan the ticket and verify" />
               </StepBox>
             </Box>
           </Guide>
