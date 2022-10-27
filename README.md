@@ -1,20 +1,23 @@
 # CryptoTix
-[CryptoTix](https://cryptotix.limaois.me) is a tool for event holders to verifiy whether a user qualified by having some tokens.
+[CryptoTix](https://github.com/flyinglimao/cryptotix) is a tool for event holders to verifiy whether a user qualified by having some tokens.
 
 ## How it works
 
 ### Create an event
-The event holders will create an event on CryptoTix (the holders can run their own server), and specify the rules of the certificate issuing. Then, they will get an URL that can be shared to people.
+The event holders will create an event on CryptoTix (the holders can run their own server), and specify the rules of the ticket issuing. Then, they will get an URL that can be shared to people.
+![Create Event Demo](/docs/create-event.png)
 
 ### Verify and sign
-A user will be able to sign a message on this website to obtain a certificate if its wallet is qualified under the rules. The user can transfer the certificate to another device (and optionally encrypt it) and revoke a certificate.
+A user will be able to sign a message on this website to obtain a ticket if its wallet is qualified under the rules. The user can encrypt the ticket with a password and transfer the ticket to another device. Since the ticket is encrypted, user can safely send it via an insecure way and decrypt it when verifying.
+![Issue Ticket Demo](/docs/issue-ticket.png)
 
 ### Validate certificate
-At the event, the event holder will check the certificate. The content of the certificate includes data (such as collection, token id, etc.) and a signature. If the content and signature are matched and checked on chain, the certificate will get passed.
+At the event, the event holder will check the ticket. The content of the ticket includes an approving message and a signature. If the content and signature are matched and user's state (ownership of tokens) are checked on chain, the ticket will get passed and be cut. Event host can see if an address already used its ticket.
+![Issue Ticket Demo](/docs/cut-ticket.png)
 
-## Getting Started
+## Demo
 
-Open [CryptoTix](https://cryptotix.limaois.me).
+[CryptoTix](https://cryptotix.limaois.me).
 
 ## Run a New Server
 
@@ -43,7 +46,4 @@ You may want to limit people to create an event, set `DISABLE_REGISTER` to `true
 ## Development
 
 CryptoTix is built with [Blitz](https://blitzjs.com/), please refer to [Blitz's documentation](https://blitzjs.com/docs/get-started) for details.
-
-### Components
-
-The main logic components including
+The underlying token data source is [Moralis](https://moralis.io/) since indexing is a heavy work that consumes a lot of time and network resource.
