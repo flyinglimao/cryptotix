@@ -5,15 +5,15 @@
 
 ### Create an event
 The event holders will create an event on CryptoTix (the holders can run their own server), and specify the rules of the ticket issuing. Then, they will get an URL that can be shared to people.
-![Create Event Demo](/docs/create-event.png)
+![Create Event Demo](/public/create-event.png)
 
 ### Verify and sign
 A user will be able to sign a message on this website to obtain a ticket if its wallet is qualified under the rules. The user can encrypt the ticket with a password and transfer the ticket to another device. Since the ticket is encrypted, user can safely send it via an insecure way and decrypt it when verifying.
-![Issue Ticket Demo](/docs/issue-ticket.png)
+![Issue Ticket Demo](/public/issue-ticket.png)
 
 ### Validate certificate
 At the event, the event holder will check the ticket. The content of the ticket includes an approving message and a signature. If the content and signature are matched and user's state (ownership of tokens) are checked on chain, the ticket will get passed and be cut. Event host can see if an address already used its ticket.
-![Issue Ticket Demo](/docs/cut-ticket.png)
+![Issue Ticket Demo](/public/cut-ticket.png)
 
 ## Demo
 
